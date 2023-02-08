@@ -7,7 +7,7 @@
 		$query=mysqli_query($dbcon,"select * from `Users` where USERNAME='$username'");
 		if (mysqli_num_rows($query) == 0){
 			$_SESSION['message']="User not found";
-			header("location:loginSSCK.php");
+			header("location:index.php");
 		}
 		else{
 			$row=mysqli_fetch_array($query);
@@ -26,6 +26,7 @@
 					$_SESSION['message']="failed to update SESSIONID";
 				}
 				$_SESSION['id']=$sessionID;
+				header('location:success.php');
 			}
 			else{
 				header("location:alreadyLoggedIn.html");
@@ -33,6 +34,7 @@
 		}
 	}
 	else{
-		
+		header('location:index.php');
+		$_SESSION['message']="Please, log in";
 	}
 ?>
