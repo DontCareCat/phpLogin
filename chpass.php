@@ -15,7 +15,7 @@
 			$row=mysqli_fetch_array($query);
 			if(isset($_POST['rememberme'])){
 				setcookie("user",$row['USERNAME'],time() + (86400*30));
-				setcookie("password",$password,time()+(86400*30));
+				setcookie("password",$newpassword,time()+(86400*30));
 			}
 			if($row['SESSIONID']==$_SESSION['id'] && $row['SESSIONID']==$cookieSessionId){
 				$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -24,14 +24,13 @@
 					$index=rand(0,strlen($characters)-1);
 					$salt.=$characters[$index];
 				}
-				$cryptedpassword = hash('sha256',$password.$salt);
+				$cryptedpassword = hash('sha256', $newpassword.$salt);
 				$sqlstring="UPDATE `Users` SET HASHPASSWD=\"".$cryptedpassword."\" , SALT=\"".$salt."\" WHERE USERNAME=\"".$_SESSION['user']."\" AND SESSIONID=".$_SESSION['id']." AND ID=".$row['ID'];
-				#$sqlstring="UPDATE Users SET HASHPASSWD=".$cryptedpassword.", SALT=".$salt." , LASTLOGIN=SYSDATE() WHERE ID=".$row['ID'];
 				if($dbcon->query($sqlstring) === TRUE){
-					$_SESSION['message']="Password updated successfully";
+					$_SESSION['message']=$cryptedpassword.":".$salt;
 				}
 				else{
-					$_SESSION['message']="Failed to update Password";
+					$_SESSION['message']=$cryptedpassword.":".$salt;
 				}
 				header("location:index.php");
 			}
