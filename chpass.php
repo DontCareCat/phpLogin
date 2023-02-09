@@ -27,10 +27,10 @@
 				$cryptedpassword = hash('sha256', $newpassword.$salt);
 				$sqlstring="UPDATE `Users` SET HASHPASSWD=\"".$cryptedpassword."\" , SALT=\"".$salt."\" WHERE USERNAME=\"".$_SESSION['user']."\" AND SESSIONID=".$_SESSION['id']." AND ID=".$row['ID'];
 				if($dbcon->query($sqlstring) === TRUE){
-					$_SESSION['message']=$cryptedpassword.":".$salt;
+					$_SESSION['message']="Password updated successfully";
 				}
 				else{
-					$_SESSION['message']=$cryptedpassword.":".$salt;
+					$_SESSION['message']="Failed to update password";
 				}
 				header("location:index.php");
 			}
