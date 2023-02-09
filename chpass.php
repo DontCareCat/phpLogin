@@ -32,6 +32,7 @@
 				else{
 					$_SESSION['message']="Failed to update Password";
 				}
+				header("location:index.php");
 			}
 			else{
 				$_SESSION['message']="Unexpected session issue";
