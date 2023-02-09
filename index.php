@@ -14,6 +14,7 @@
 	<label>PASSWORD:</label><input type="password" value="<?php if (isset($_COOKIE)){echo $_COOKIE["password"];}?>" name="password"><br><br>
 	<input type="checkbox" name="rememberme"<?php if (isset($_COOKIE["user"]) && isset($_COOKIE["password"])){ echo "checked";}?>> Remember me <br><br>
 	<input type="submit" value="Login" name="login">
+	<input type="submit" value="Register" name="register">
 	</form>
 	<span>
 		<?php

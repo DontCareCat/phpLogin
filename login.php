@@ -32,16 +32,45 @@
 				}
 				else{
 					$_SESSION['message']="Incorecct password";
-					header('index.php');
+					header('location:index.php');
 				}
 			}
 			else{
-				header("location:alreadyLoggedIn.html");
+				header('location:index.php');
+				$_SESSION['message']='Already logged in';
 			}
 		}
 	}
-	else{
-		header('location:index.php');
-		$_SESSION['message']="Please, log in";
+	if(isset($_POST['register'])){
+		session_start();
+		include('dbcon.php');
+		$username=$_POST['username'];
+		$password=$_POST['password'];
+		$query=mysqli_query($dbcon,"select * from `Users` where USERNAME='$username'");
+		if (mysqli_num_rows($query) != 0){
+			$_SESSION['message']="User already exists";
+			header("location:index.php");
+		}
+		else{
+			if(isset($_POST['rememberme'])){
+				setcookie("user",$row['USERNAME'],time() + (86400*30));
+				setcookie("password",$password,time()+(86400*30));
+			}
+			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+			$salt ='';
+			for ($i=0; $i< 16; $i++){
+				$index=rand(0,strlen($characters)-1);
+				$salt.=$characters[$index];
+			}
+			$cryptedpassword = hash('sha256',$password.$salt);
+			$sqlstring = "INSERT INTO Users ( USERNAME , HASHPASSWD , SALT ) VALUES ( \"".$username."\" , \"".$cryptedpassword."\" , \"".$salt."\" )";
+			if($dbcon->query($sqlstring) === TRUE){
+				$_SESSION['message']="Users updated";
+			}
+			else{
+				$_SESSION['message']="failed to update Users";
+			}
+			header("location:index.php");
+		}
 	}
 ?>
