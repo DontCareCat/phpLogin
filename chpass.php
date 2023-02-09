@@ -25,7 +25,7 @@
 					$salt.=$characters[$index];
 				}
 				$cryptedpassword = hash('sha256',$password.$salt);
-				$sqlstring="UPDATE `Users` SET HASHPASSWD='$cryptedpassword' , SALT='$salt'";
+				$sqlstring="UPDATE `Users` SET HASHPASSWD='$cryptedpassword' , SALT='$salt' WHERE USERNAME='$_SESSION['user']' AND SESSIONID='$_SESSION['ID']'";
 				if($dbcon->query($sqlstring) === TRUE){
 					$_SESSION['message']="Password updated successfully";
 				}
