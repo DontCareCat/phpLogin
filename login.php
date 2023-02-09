@@ -13,13 +13,13 @@
 			$row=mysqli_fetch_array($query);
 			if(isset($_POST['rememberme'])){
 				setcookie("user",$row['USERNAME'],time() + (86400*30));
-				setcookie("password",$password],time()+(86400*30));
+				setcookie("password",$password,time()+(86400*30));
 			}
 			if($row['SESSIONID'==0]){
 				$sessionID=rand(1,999);
 				$hashedpassword= hash('sha256',$password.$row['SALT']);
 				if($row['HASHPASSWD']==$hashedpassword){
-					setcookie("sessionID"=$sessionID,time()+3600);
+					setcookie("sessionID",$sessionID,time()+3600);
 					$sqlstring="UPDATE Users SET SESSIONID=".$sessionID." WHERE ID=".row['ID'];
 					if($dbcon->query($sqlstring) === TRUE){
 						$_SESSION['message']="SESSIONID updated";
