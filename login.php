@@ -17,16 +17,23 @@
 			}
 			if($row['SESSIONID'==0]){
 				$sessionID=rand(1,999);
-				setcookie("sessionID"=$sessionID,time()+3600);
-				$sqlstring="UPDATE Users SET SESSIONID=".$sessionID."WHERE ID=".row['ID'];
-				if($dbcon->query($sqlstring) === TRUE){
-					$_SESSION['message']="SESSIONID updated";
+				$hashedpassword= hash('sha256',$password.$row['SALT']);
+				if($row['HASHPASSWD']==$hashedpassword){
+					setcookie("sessionID"=$sessionID,time()+3600);
+					$sqlstring="UPDATE Users SET SESSIONID=".$sessionID." WHERE ID=".row['ID'];
+					if($dbcon->query($sqlstring) === TRUE){
+						$_SESSION['message']="SESSIONID updated";
+					}
+					else{
+						$_SESSION['message']="failed to update SESSIONID";
+					}
+					$_SESSION['id']=$sessionID;
+					header('location:success.php');
 				}
 				else{
-					$_SESSION['message']="failed to update SESSIONID";
+					$_SESSION['message']="Incorecct password";
+					header('index.php');
 				}
-				$_SESSION['id']=$sessionID;
-				header('location:success.php');
 			}
 			else{
 				header("location:alreadyLoggedIn.html");
