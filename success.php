@@ -2,6 +2,7 @@
 	session_start();
 	if (!isset($_SESSION['id'])){
 		$_SESSION['message']='User is not Logged In';
+		header("location:index.php")
 	}
 	include('dbcon.php');
 ?>
