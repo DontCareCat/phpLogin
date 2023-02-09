@@ -28,6 +28,7 @@
 						$_SESSION['message']="failed to update SESSIONID";
 					}
 					$_SESSION['id']=$sessionID;
+					$_SESSION['user']=$username;
 					header('location:success.php');
 				}
 				else{
