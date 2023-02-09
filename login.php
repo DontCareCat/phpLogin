@@ -20,7 +20,7 @@
 				$hashedpassword= hash('sha256',$password.$row['SALT']);
 				if($row['HASHPASSWD']==$hashedpassword){
 					setcookie("sessionID",$sessionID,time()+3600);
-					$sqlstring="UPDATE Users SET SESSIONID=".$sessionID." WHERE ID=".row['ID'];
+					$sqlstring="UPDATE Users SET SESSIONID=".$sessionID.", LASTLOGIN=SYSDATE() WHERE ID=".$row['ID'];
 					if($dbcon->query($sqlstring) === TRUE){
 						$_SESSION['message']="SESSIONID updated";
 					}
